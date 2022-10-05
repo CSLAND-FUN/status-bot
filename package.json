@@ -1,0 +1,15 @@
+{
+  "name": "csland-status",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "gamedig": "^4.0.5",
+    "undici": "^5.10.0"
+  },
+  "devDependencies": {
+    "@types/gamedig": "^3.0.2",
+    "@types/node": "^18.8.0"
+  }
+}
