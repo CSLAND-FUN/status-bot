@@ -65,6 +65,8 @@ async function update() {
 
     if (data.status === statuses[2]) {
       if (tries === 3) {
+        tries = 0;
+
         const _text = [`› Сервер: ${data.server}`, `› Статус: ${data.status}`];
         await request(
           url(
@@ -120,6 +122,30 @@ async function getServersData() {
       players: _data.players.length,
       status: statuses[1],
     });
+  }
+
+  return data;
+}
+
+async function getServerStatus(server: string) {
+  var data: { status: "online" | "offline" };
+
+  for (const server of servers) {
+    var _data: QueryResult;
+
+    try {
+      _data = await query(server);
+    } catch (error) {
+      data = {
+        status: "offline",
+      };
+
+      continue;
+    }
+
+    data = {
+      status: "online",
+    };
   }
 
   return data;
