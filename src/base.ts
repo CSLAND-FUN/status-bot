@@ -34,16 +34,19 @@ export const servers: QueryOptions[] = [
     type: "csgo",
     host: "62.122.213.51",
     port: 27015,
+    maxAttempts: 5,
   },
   {
     type: "csgo",
     host: "46.174.52.85",
     port: 27015,
+    maxAttempts: 5,
   },
   {
     type: "csgo",
     host: "45.136.204.24",
     port: 27077,
+    maxAttempts: 5,
   },
 ];
 

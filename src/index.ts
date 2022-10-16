@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import { query, QueryResult } from "gamedig";
+import { query, QueryOptions, QueryResult } from "gamedig";
 import { request } from "undici";
 import { base_message, serverNames, servers, statuses } from "./base";
 
@@ -21,7 +21,6 @@ setInterval(async () => {
   await update();
 }, 300000);
 
-var tries = 0;
 async function update() {
   const text = base_message;
   const _data = await getServersData();
@@ -64,21 +63,14 @@ async function update() {
     }
 
     if (data.status === statuses[2]) {
-      if (tries === 3) {
-        tries = 0;
-
-        const _text = [`› Сервер: ${data.server}`, `› Статус: ${data.status}`];
-        await request(
-          url(
-            `sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(
-              _text.join("\n")
-            )}`
-          )
-        );
-      } else {
-        tries++;
-        await update();
-      }
+      const _text = [`› Сервер: ${data.server}`, `› Статус: ${data.status}`];
+      await request(
+        url(
+          `sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(
+            _text.join("\n")
+          )}`
+        )
+      );
     }
   }
 
@@ -122,30 +114,6 @@ async function getServersData() {
       players: _data.players.length,
       status: statuses[1],
     });
-  }
-
-  return data;
-}
-
-async function getServerStatus(server: string) {
-  var data: { status: "online" | "offline" };
-
-  for (const server of servers) {
-    var _data: QueryResult;
-
-    try {
-      _data = await query(server);
-    } catch (error) {
-      data = {
-        status: "offline",
-      };
-
-      continue;
-    }
-
-    data = {
-      status: "online",
-    };
   }
 
   return data;
