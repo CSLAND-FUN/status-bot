@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import { query, QueryOptions, QueryResult } from "gamedig";
+import { query, QueryResult } from "gamedig";
 import { request } from "undici";
 import { base_message, serverNames, servers, statuses } from "./base";
 
@@ -24,7 +24,6 @@ setInterval(async () => {
 async function update() {
   const text = base_message;
   const _data = await getServersData();
-  text[0] = `— Статус серверов —`;
 
   var public_online = 0;
   var mirage_online = 0;
@@ -33,7 +32,6 @@ async function update() {
   for (const data of _data) {
     switch (data.server) {
       case "CSLAND | Public": {
-        text[2] = `› CSLAND | Public:`;
         text[3] = `» Статус: ${data.status}`;
         text[4] = `» Карта: ${data.map}`;
         text[5] = `» Кол-во игроков: ${data.players}`;
@@ -44,7 +42,6 @@ async function update() {
       }
 
       case "CSLAND | Mirage": {
-        text[7] = `› CSLAND | Mirage:`;
         text[8] = `» Статус: ${data.status}`;
         text[9] = `» Карта: ${data.map}`;
         text[10] = `» Кол-во игроков: ${data.players}`;
@@ -53,7 +50,6 @@ async function update() {
       }
 
       case "CSLAND | AWP": {
-        text[12] = `› CSLAND | AWP:`;
         text[13] = `» Статус: ${data.status}`;
         text[14] = `» Карта: ${data.map}`;
         text[15] = `» Кол-во игроков: ${data.players}`;
@@ -63,7 +59,12 @@ async function update() {
     }
 
     if (data.status === statuses[2]) {
-      const _text = [`› Сервер: ${data.server}`, `› Статус: ${data.status}`];
+      const _text = [
+        `[${new Date().toLocaleString("ru")}]`,
+        `› Сервер: ${data.server}`,
+        `› Статус: ${data.status}`,
+      ];
+
       await request(
         url(
           `sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(
@@ -100,8 +101,8 @@ async function getServersData() {
     } catch (error) {
       data.push({
         server: serverNames[server.host],
-        map: null,
-        players: null,
+        map: "-",
+        players: 0,
         status: statuses[2],
       });
 
